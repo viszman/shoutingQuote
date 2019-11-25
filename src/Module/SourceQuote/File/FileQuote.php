@@ -3,6 +3,7 @@
 namespace App\Module\SourceQuote\File;
 
 use App\Module\SourceQuote\Source;
+use App\Module\Utility\Utils;
 use ReflectionClass;
 
 class FileQuote implements Source
@@ -22,10 +23,10 @@ class FileQuote implements Source
 
     public function getQuotes(string $famousPerson, int $count): array
     {
-        $famousPerson = $this->makeCommon($famousPerson);
+        $famousPerson = Utils::makeCommon($famousPerson);
         $foundQuotes = [];
         foreach ($this->quotes['quotes'] as $quote) {
-            if ($famousPerson === $this->makeCommon($quote['author'])) {
+            if ($famousPerson === Utils::makeCommon($quote['author'])) {
                 $foundQuotes[] = $quote['quote'];
             }
 
@@ -37,8 +38,4 @@ class FileQuote implements Source
         return $foundQuotes;
     }
 
-    protected function makeCommon(string $someString)
-    {
-        return mb_strtolower(str_replace([' ', '-'], '', $someString));
-    }
 }

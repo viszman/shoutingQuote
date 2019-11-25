@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Module\CacheShout\CacheFile;
 use App\Module\FamousPerson\FamousPerson;
 use App\Module\Shout\Shout;
 use App\Module\SourceQuote\File\FileQuote;
@@ -26,7 +27,7 @@ class ShoutingQuoteController extends AbstractController
             return $this->json(['message' => 'Number of quotes cannot exceed 10'], 404);
         }
 
-        $personQuotes = new FamousPerson(new FileQuote(), new Shout());
+        $personQuotes = new FamousPerson(new FileQuote(), new Shout(), new CacheFile());
         $quotesShouted = $personQuotes->getPerson($famousPerson, $limit);
 
         return $this->json($quotesShouted);
