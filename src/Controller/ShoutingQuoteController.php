@@ -21,7 +21,7 @@ class ShoutingQuoteController extends AbstractController
      */
     public function index(Request $request, string $famousPerson): JsonResponse
     {
-        $limit = (int) $request->query->get('limit');
+        $limit = (int)$request->query->get('limit');
         if ($limit > 10) {
             return $this->json(['message' => 'Number of quotes cannot exceed 10'], 404);
         }

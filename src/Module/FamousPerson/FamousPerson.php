@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Module\FamousPerson;
 
 use App\Module\Shout\Shout;

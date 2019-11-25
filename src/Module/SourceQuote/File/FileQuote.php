@@ -3,6 +3,7 @@
 namespace App\Module\SourceQuote\File;
 
 use App\Module\SourceQuote\Source;
+use ReflectionClass;
 
 class FileQuote implements Source
 {
@@ -11,12 +12,12 @@ class FileQuote implements Source
 
     public function __construct()
     {
-        $reflector = new \ReflectionClass(__CLASS__);
+        $reflector = new ReflectionClass(__CLASS__);
         $file = $reflector->getFileName();
         $file = str_replace('FileQuote.php', '', $file);
         $file .= $this->quoteFile;
         $contents = file_get_contents($file);
-        $this->quotes = json_decode($contents, true);
+        $this->quotes = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
     }
 
     public function getQuotes(string $famousPerson, int $count): array
@@ -32,6 +33,7 @@ class FileQuote implements Source
                 return $foundQuotes;
             }
         }
+
         return $foundQuotes;
     }
 

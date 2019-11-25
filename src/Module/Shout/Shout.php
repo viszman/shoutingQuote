@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Module\Shout;
 
 class Shout
@@ -6,6 +7,7 @@ class Shout
     public function convert(string $quote): string
     {
         $upperCase = mb_strtoupper($quote);
+
         return $this->addExclamationMark($upperCase);
     }
 
