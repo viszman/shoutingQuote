@@ -13,7 +13,6 @@ class CacheFileTest extends TestCase
     public function testCacheContents()
     {
         $cache = new CacheFile(self::VAR_CACHE_QUOTE_JSON);
-        echo getcwd();
         $toCache = [
             'The only way to do great work is to love what you do.',
             'Your time is limited, so don’t waste it living someone else’s life!'

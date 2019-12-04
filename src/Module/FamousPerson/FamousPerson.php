@@ -3,7 +3,6 @@
 namespace App\Module\FamousPerson;
 
 use App\Module\CacheShout\Cache;
-use App\Module\Shout\Shout;
 use App\Module\SourceQuote\Source;
 
 class FamousPerson
@@ -13,18 +12,25 @@ class FamousPerson
      */
     private $source;
     /**
-     * @var \App\Module\Shout\Shout
+     * @var \App\Module\Decorators\ShoutDecorator
      */
-    private $shouter;
+    private $decorators;
     /**
      * @var \App\Module\CacheShout\Cache
      */
     private $cache;
 
-    public function __construct(Source $source, Shout $shouter, Cache $cache)
+    /**
+     * FamousPerson constructor.
+     *
+     * @param \App\Module\SourceQuote\Source           $source
+     * @param \App\Module\Decorators\StringDecorator[] $decorators
+     * @param \App\Module\CacheShout\Cache             $cache
+     */
+    public function __construct(Source $source, array $decorators, Cache $cache)
     {
         $this->source = $source;
-        $this->shouter = $shouter;
+        $this->decorators = $decorators;
         $this->cache = $cache;
     }
 
@@ -32,12 +38,12 @@ class FamousPerson
     {
         $cached = $this->cache->checkCache($famousPerson, $count);
         if ($cached) {
-            return $this->shoutQuote($cached);
+            return $this->decorateQuote($cached);
         }
         $quotes = $this->source->getQuotes($famousPerson, $count);
         $this->cache->cacheContents($famousPerson, $quotes);
 
-        return $this->shoutQuote($quotes);
+        return $this->decorateQuote($quotes);
     }
 
     /**
@@ -45,11 +51,14 @@ class FamousPerson
      *
      * @return array
      */
-    protected function shoutQuote(array $quotes): array
+    protected function decorateQuote(array $quotes): array
     {
         $shouted = [];
         foreach ($quotes as $quote) {
-            $shouted[] = $this->shouter->convert($quote);
+            foreach ($this->decorators as $decorator) {
+                $quote = $decorator->decorate($quote);
+            }
+            $shouted[] = $quote;
         }
 
         return $shouted;

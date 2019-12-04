@@ -3,7 +3,8 @@
 namespace App\Module\FamousPerson;
 
 use App\Module\CacheShout\CacheFile;
-use App\Module\Shout\Shout;
+use App\Module\Decorators\ExclamationDecorator;
+use App\Module\Decorators\ShoutDecorator;
 use App\Module\SourceQuote\File\FileQuote;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +14,8 @@ class FamousPersonTest extends TestCase
 
     public function testGetPerson()
     {
-        $personQuotes = new FamousPerson(new FileQuote(), new Shout(),
+        $personQuotes = new FamousPerson(new FileQuote(),
+            [new ShoutDecorator(), new ExclamationDecorator()],
             new CacheFile(self::VAR_CACHE_QUOTE_JSON));
 
         $quotesShouted = $personQuotes->getPerson('steve-jobs', 2);
@@ -24,7 +26,8 @@ class FamousPersonTest extends TestCase
         ];
         $this->assertEquals($quotesShouted, $expected);
 
-        $personQuotes = new FamousPerson(new FileQuote(), new Shout(),
+        $personQuotes = new FamousPerson(new FileQuote(),
+            [new ShoutDecorator(), new ExclamationDecorator()],
             new CacheFile(self::VAR_CACHE_QUOTE_JSON));
         $quotesShouted = $personQuotes->getPerson('steve jobs', 1);
 

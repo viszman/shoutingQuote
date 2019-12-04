@@ -2,10 +2,7 @@
 
 namespace App\Controller;
 
-use App\Module\CacheShout\CacheFile;
-use App\Module\FamousPerson\FamousPerson;
-use App\Module\Shout\Shout;
-use App\Module\SourceQuote\File\FileQuote;
+use App\Module\Builders\ShoutQuoteBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,8 +23,7 @@ class ShoutingQuoteController extends AbstractController
         if ($limit > 10) {
             return $this->json(['message' => 'Number of quotes cannot exceed 10'], 404);
         }
-
-        $personQuotes = new FamousPerson(new FileQuote(), new Shout(), new CacheFile());
+        $personQuotes = (new ShoutQuoteBuilder())->build();
         $quotesShouted = $personQuotes->getPerson($famousPerson, $limit);
 
         return $this->json($quotesShouted);
